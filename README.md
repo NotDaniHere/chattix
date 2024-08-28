@@ -1,2 +1,5 @@
-# The original Rells project continued and maintained (CLI).
-An even stronger project and higher ambition alongside insane goals compared to the previous one.
+# The new Rells project.
+An even stronger project, higher ambition alongside insane goals compared to the previous one.
+
+
+Old CLI version still maintained.
