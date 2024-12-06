@@ -1,0 +1,8 @@
+{
+    "RELLS_SERVER_CONFIG": [
+        "127.0.0.1",
+        40132,
+        "default_server_password",
+        "default_signup_password"
+    ]
+}
