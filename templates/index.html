@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chattix Development Build</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>Chattix</h1>
+    <h2>Development Build</h2>
+    <div id="chatbox"></div>
+    <form id="chatForm">
+        <input type="text" id="username" placeholder="Your name" required />
+        <input type="text" id="message" placeholder="Your message" required />
+        <button type="submit">Send</button>
+    </form>
+    <a href="http://chattix.cfd"> Powered by Chattix</a>
+
+    <!-- Link to external JavaScript file -->
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
+</body>
+</html>
