@@ -3,89 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Server Control Panel</title>
+    <title>Chatroom</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: linear-gradient(to right, #1e3c72, purple);
-            color: #ffffff;
             margin: 0;
             padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
+            background-color: #f4f4f9;
         }
-        header {
-            background-color: #1b2735;
-            padding: 20px;
-            text-align: center;
-            width: 100%;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        #chatbox {
+            width: 80%;
+            max-width: 600px;
+            height: 400px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            overflow-y: scroll;
+            margin: 20px 0;
+            padding: 10px;
+            background: #fff;
         }
-        header h1 {
-            margin: 0;
-            font-size: 2.5em;
+        #chatbox div {
+            margin-bottom: 10px;
         }
-        main {
+        #chatbox .username {
+            font-weight: bold;
+        }
+        form {
+            width: 80%;
+            max-width: 600px;
             display: flex;
-            gap: 20px;
-            padding: 20px;
+            gap: 10px;
+        }
+        input[type="text"] {
+            flex: 1;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
         button {
-            background-color: #FFD700;
-            color: #1b2735;
-            font-size: 1.2em;
-            font-weight: bold;
-            padding: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
             border: none;
+            background-color: #007bff;
+            color: #fff;
             border-radius: 5px;
             cursor: pointer;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-            transition: all 0.2s ease;
-            flex: 1; /* Ensures buttons are equally sized */
-            max-width: 200px;
-            text-align: center;
         }
         button:hover {
-            background-color: #ffc107;
-            transform: translateY(-3px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-        footer {
-            text-align: center;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: rgba(255, 255, 255, 0.8);
-        }
-        footer a {
-            color: #FFD700;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
-        }
-        @media (max-width: 768px) {
-            main {
-                flex-direction: column; /* Stacks buttons on smaller screens */
-                align-items: center;
-            }
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>Server Control Panel</h1>
-    </header>
-    <main>
-        <button onclick="window.location.href='/config'">View/Edit Config</button>
-        <button onclick="window.location.href='/users'">Manage Users</button>
-        <button onclick="window.location.href='/ban'">Ban User</button>
-        <button onclick="window.location.href='/kick'">Kick User</button>
-    </main>
-    <footer>
-        <p>Powered by <a href="https://chattix.cfd" target="_blank">Chattix</a> &copy; 2024</p>
-    </footer>
+    <h1>Flask Chatroom</h1>
+    <div id="chatbox"></div>
+    <form id="chatForm">
+        <input type="text" id="username" placeholder="Your name" required />
+        <input type="text" id="message" placeholder="Your message" required />
+        <button type="submit">Send</button>
+    </form>
+
+    <script>
+        const chatbox = document.getElementById("chatbox");
+        const chatForm = document.getElementById("chatForm");
+
+        async function fetchMessages() {
+            try {
+                const response = await fetch('/receive');
+                const messages = await response.json();
+                chatbox.innerHTML = messages.map(msg => `
+                    <div>
+                        <span class="username">${msg.username}</span>: 
+                        <span>${msg.message}</span>
+                        <small>[${msg.timestamp}]</small>
+                    </div>
+                `).join("");
+                chatbox.scrollTop = chatbox.scrollHeight;
+            } catch (err) {
+                console.error("Error fetching messages:", err);
+            }
+        }
+
+        chatForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const message = document.getElementById("message").value;
+
+            try {
+                await fetch('/send', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, message }),
+                });
+                document.getElementById("message").value = "";
+                fetchMessages();
+            } catch (err) {
+                console.error("Error sending message:", err);
+            }
+        });
+
+        setInterval(fetchMessages, 2000); // Refresh messages every 2 seconds
+        fetchMessages(); // Initial fetch
+    </script>
 </body>
 </html>
