@@ -4,62 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chattix Development Build</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f4f4f9;
-        }
-        #chatbox {
-            width: 80%;
-            max-width: 600px;
-            height: 400px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            overflow-y: scroll;
-            margin: 20px 0;
-            padding: 10px;
-            background: #fff;
-        }
-        #chatbox div {
-            margin-bottom: 10px;
-        }
-        #chatbox .username {
-            font-weight: bold;
-        }
-        form {
-            width: 80%;
-            max-width: 600px;
-            display: flex;
-            gap: 10px;
-        }
-        input[type="text"] {
-            flex: 1;
-            padding: 10px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        button {
-            padding: 10px 20px;
-            font-size: 16px;
-            border: none;
-            background-color: #007bff;
-            color: #fff;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <h1>Chattix</h1>
+    <h2>Development Build</h2>
     <div id="chatbox"></div>
     <form id="chatForm">
         <input type="text" id="username" placeholder="Your name" required />
@@ -67,47 +16,7 @@
         <button type="submit">Send</button>
     </form>
 
-    <script>
-        const chatbox = document.getElementById("chatbox");
-        const chatForm = document.getElementById("chatForm");
-
-        async function fetchMessages() {
-            try {
-                const response = await fetch('/receive');
-                const messages = await response.json();
-                chatbox.innerHTML = messages.map(msg => `
-                    <div>
-                        <span class="username">${msg.username}</span>: 
-                        <span>${msg.message}</span>
-                        <small>[${msg.timestamp}]</small>
-                    </div>
-                `).join("");
-                chatbox.scrollTop = chatbox.scrollHeight;
-            } catch (err) {
-                console.error("Error fetching messages:", err);
-            }
-        }
-
-        chatForm.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const username = document.getElementById("username").value;
-            const message = document.getElementById("message").value;
-
-            try {
-                await fetch('/send', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, message }),
-                });
-                document.getElementById("message").value = "";
-                fetchMessages();
-            } catch (err) {
-                console.error("Error sending message:", err);
-            }
-        });
-
-        setInterval(fetchMessages, 2000); // Refresh messages every 2 seconds
-        fetchMessages(); // Initial fetch
-    </script>
+    <!-- Link to external JavaScript file -->
+    <script src="{{ url_for('static', filename='chat.js') }}"></script>
 </body>
 </html>
