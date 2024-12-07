@@ -1,4 +1,4 @@
-# Flask Chatroom
+# Chattix
 
 A simple real-time chatroom built with Python's Flask framework, using HTML, CSS, and JavaScript for the frontend. This app allows users to send and receive messages in a chatroom interface.
 
@@ -22,6 +22,7 @@ A simple real-time chatroom built with Python's Flask framework, using HTML, CSS
 3. **Run the Server**:
     ```bash
     python server.py
-
-
-Have fun!
+## Access
+To access the chattix server, navigate to the following on your browser:
+   ```bash
+   http://127.0.0.1:5000
